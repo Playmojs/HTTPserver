@@ -9,20 +9,23 @@ using json = nlohmann::json;
 
 namespace chrono = std::chrono;
 
-User::User(int id, std::string username) : id(id), username(username){
+UserData::UserData(int id, std::string username) : id(id), username(username){
         time_of_creation = time(0);
 }
 
-std::string User::to_string(){
+std::string UserData::to_string(){
     json j = *this;
     return j.dump();
     
 }
 
-User::User(std::string jsoninput){
+UserData::UserData(std::string jsoninput){
     json j = json::parse(jsoninput);
-    std::cout << j << "\n";
-    id = j["id"].template get<int>();
+    try{
+        id = j["id"].template get<int>();
+    } catch(std::exception ex){
+        std::cout << "Wrong id \n";
+    }
     username = j["username"].template get<std::string>();
     time_of_creation = j["time_of_creation"].template get<time_t>();
 }
